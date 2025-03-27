@@ -3,9 +3,9 @@ const session = require("express-session");
 const passport = require("passport");
 const cors = require("cors");
 require("dotenv").config();
-require("./auth/google"); // Google strategy config
+require("./auth/google");
+const MemoryStore = require("memorystore")(session);
 const driveRoutes = require("./routes/drive");
-
 const authRoutes = require("./routes/auth");
 
 const app = express();
@@ -22,10 +22,13 @@ app.use(
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
+    store: new MemoryStore({
+      checkPeriod: 86400000, 
+    }),
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: false,
+      secure: process.env.NODE_ENV === "production",
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000,
     },
