@@ -21,11 +21,11 @@ app.use(
 // Session setup
 app.use(
   session({
-    secret: "your-secret",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: false, // true if using https
+      secure: false,
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000,
     },

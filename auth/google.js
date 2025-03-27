@@ -9,11 +9,11 @@ passport.use(
       callbackURL: process.env.GOOGLE_CALLBACK_URL,
     },
     (accessToken, refreshToken, profile, done) => {
-       console.log("accessToken", accessToken);
       const user = {
         googleId: profile.id,
         displayName: profile.displayName,
         email: profile.emails[0].value,
+        profilePic: profile.photos[0].value,
         tokens: {
           access_token: accessToken,
           refresh_token: refreshToken,

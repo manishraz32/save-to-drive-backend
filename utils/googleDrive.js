@@ -1,4 +1,3 @@
-// utils/googleDrive.js
 const { google } = require("googleapis");
 const { JSDOM } = require("jsdom");
 
@@ -12,7 +11,7 @@ function getOAuthClient(tokens) {
   return oAuth2Client;
 }
 
-async function createGoogleDoc(auth, htmlContent) {
+async function createGoogleDoc(auth, fileName, htmlContent) {
   const docs = google.docs({ version: "v1", auth });
   const drive = google.drive({ version: "v3", auth });
 
@@ -46,7 +45,7 @@ async function createGoogleDoc(auth, htmlContent) {
   // 2. Create an empty Google Doc
   const doc = await docs.documents.create({
     requestBody: {
-      title: "Letter from MERN App",
+      title: fileName,
     },
   });
 

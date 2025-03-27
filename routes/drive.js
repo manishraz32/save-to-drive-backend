@@ -7,36 +7,28 @@ const { getOAuthClient, createGoogleDoc } = require("../utils/googleDrive");
 router.post("/save-to-drive", async (req, res) => {
   try {
     const user = req.session?.passport?.user;
-
-    console.log("user: ", user);
     if (!user || !user.tokens) {
       return res.status(401).json({ message: "Not authenticated" });
     }
-    console.log("req body: ", req.body);
-    const { content } = req.body;
+    const { fileName, content } = req.body;
     const auth = getOAuthClient(user.tokens);
-
-    const link = await createGoogleDoc(auth, content);
+    const link = await createGoogleDoc(auth, fileName, content);
 
     res.status(200).json({ message: "Document created", link });
   } catch (err) {
-    console.error("Drive error:", err);
     res.status(500).json({ message: "Failed to save to Google Drive" });
   }
 });
 
 router.get("/letters", async (req, res) => {
-  console.log("letters: ");
   try {
     const user = req.session?.passport?.user;
 
-    console.log("user: ", user);
     if (!user || !user.tokens) {
       return res.status(401).json({ message: "Not authenticated" });
     }
     const auth = getOAuthClient(user.tokens);
 
-    console.log("auth: ", auth);
     const drive = google.drive({ version: "v3", auth });
 
     const folderName = "Letters";
@@ -59,13 +51,11 @@ router.get("/letters", async (req, res) => {
       fields: "files(id, name, createdTime, modifiedTime, webViewLink)",
     });
 
-    console.log("docs: ", docsResponse.data.files);
 
     return res.status(200).json({
       documents: docsResponse.data.files,
     });
   } catch (error) {
-    console.error("Error fetching documents:", error);
     return res.status(500).json({ error: "Something went wrong" });
   }
 });
