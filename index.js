@@ -42,6 +42,7 @@ app.use("/auth", authRoutes);
 app.use("/api", driveRoutes);
 
 app.get("/profile", (req, res) => {
+  console.log("req", req);
   if (req.isAuthenticated()) {
     res.json(req.user);
   } else {
