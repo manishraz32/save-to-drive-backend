@@ -41,6 +41,9 @@ app.use(passport.session());
 app.use("/auth", authRoutes);
 app.use("/api", driveRoutes);
 
+app.get("/", (req, res) => {
+  res.json({ message: "server is up" });
+});
 app.get("/profile", (req, res) => {
   console.log("req", req);
   if (req.isAuthenticated()) {
